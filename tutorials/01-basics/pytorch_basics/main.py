@@ -22,6 +22,8 @@ import torchvision.transforms as transforms
 #                     1. Basic autograd example 1                    #
 # ================================================================== #
 
+print("Example 1: Basic autograd example 1")
+
 # Create tensors.
 x = torch.tensor(1., requires_grad=True)
 w = torch.tensor(2., requires_grad=True)
@@ -38,10 +40,13 @@ print(x.grad)    # x.grad = 2
 print(w.grad)    # w.grad = 1 
 print(b.grad)    # b.grad = 1 
 
+print('========================')
 
 # ================================================================== #
 #                    2. Basic autograd example 2                     #
 # ================================================================== #
+
+print("Example 2: Basic autograd example 2")
 
 # Create tensors of shape (10, 3) and (10, 2).
 x = torch.randn(10, 3)
@@ -82,10 +87,13 @@ pred = linear(x)
 loss = criterion(pred, y)
 print('loss after 1 step optimization: ', loss.item())
 
+print('========================')
 
 # ================================================================== #
 #                     3. Loading data from numpy                     #
 # ================================================================== #
+
+print("Example 3: Loading data from numpy")
 
 # Create a numpy array.
 x = np.array([[1, 2], [3, 4]])
@@ -95,12 +103,13 @@ y = torch.from_numpy(x)
 
 # Convert the torch tensor to a numpy array.
 z = y.numpy()
-
+print('========================')
 
 # ================================================================== #
 #                         4. Input pipline                           #
 # ================================================================== #
 
+print("Example 4: Input pipline")
 # Download and construct CIFAR-10 dataset.
 train_dataset = torchvision.datasets.CIFAR10(root='../../data/',
                                              train=True, 
@@ -127,12 +136,13 @@ images, labels = data_iter.next()
 for images, labels in train_loader:
     # Training code should be written here.
     pass
-
+print('========================')
 
 # ================================================================== #
 #                5. Input pipline for custom dataset                 #
 # ================================================================== #
 
+print("Example 5: Input pipline for custom dataset")
 # You should build your custom dataset as below.
 class CustomDataset(torch.utils.data.Dataset):
     def __init__(self):
@@ -150,16 +160,16 @@ class CustomDataset(torch.utils.data.Dataset):
         return 0 
 
 # You can then use the prebuilt data loader. 
-custom_dataset = CustomDataset()
-train_loader = torch.utils.data.DataLoader(dataset=custom_dataset,
-                                           batch_size=64, 
-                                           shuffle=True)
+#custom_dataset = CustomDataset()
+#train_loader = torch.utils.data.DataLoader(dataset=custom_dataset,
+#                                           batch_size=64, 
+#                                           shuffle=True)
 
-
+print('========================')
 # ================================================================== #
 #                        6. Pretrained model                         #
 # ================================================================== #
-
+print("Example 6: Pretrained model")
 # Download and load the pretrained ResNet-18.
 resnet = torchvision.models.resnet18(pretrained=True)
 
@@ -167,19 +177,26 @@ resnet = torchvision.models.resnet18(pretrained=True)
 for param in resnet.parameters():
     param.requires_grad = False
 
+print(resnet)
+
+images = torch.randn(64, 3, 224, 224)
+outputs = resnet(images)
+print (outputs.size())
+
 # Replace the top layer for finetuning.
 resnet.fc = nn.Linear(resnet.fc.in_features, 100)  # 100 is an example.
 
 # Forward pass.
-images = torch.randn(64, 3, 224, 224)
+#images = torch.randn(64, 3, 224, 224)
 outputs = resnet(images)
 print (outputs.size())     # (64, 100)
 
+print('========================')
 
 # ================================================================== #
 #                      7. Save and load the model                    #
 # ================================================================== #
-
+print("Example 7: Save and load the model")
 # Save and load the entire model.
 torch.save(resnet, 'model.ckpt')
 model = torch.load('model.ckpt')
@@ -187,3 +204,4 @@ model = torch.load('model.ckpt')
 # Save and load only the model parameters (recommended).
 torch.save(resnet.state_dict(), 'params.ckpt')
 resnet.load_state_dict(torch.load('params.ckpt'))
+print('========================')
