@@ -49,15 +49,26 @@ def main(args):
     total_step = len(data_loader)
     for epoch in range(args.num_epochs):
         for i, (images, captions, lengths) in enumerate(data_loader):
+            print('====')
+            print('images.shape={}'.format(images.shape))
+            print('captions.shape={}'.format(captions.shape))
+            print(captions[0])
+            print(captions[1])
+            print('len(lengths)={}'.format(len(lengths)))
+            print(lengths[0])
             
             # Set mini-batch dataset
             images = images.to(device)
             captions = captions.to(device)
             targets = pack_padded_sequence(captions, lengths, batch_first=True)[0]
+
+            print('targets.shape={}'.format(targets.shape))
             
             # Forward, backward and optimize
             features = encoder(images)
+            print('features.shape={}'.format(features.shape))
             outputs = decoder(features, captions, lengths)
+            print('outputs.shape={}'.format(outputs.shape))
             loss = criterion(outputs, targets)
             decoder.zero_grad()
             encoder.zero_grad()
@@ -93,7 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_layers', type=int , default=1, help='number of layers in lstm')
     
     parser.add_argument('--num_epochs', type=int, default=5)
-    parser.add_argument('--batch_size', type=int, default=128)
+    parser.add_argument('--batch_size', type=int, default=2)
     parser.add_argument('--num_workers', type=int, default=2)
     parser.add_argument('--learning_rate', type=float, default=0.001)
     args = parser.parse_args()
